@@ -269,3 +269,35 @@ int choisirMot(char *motChoisi, int niveau, char *filename) {
     fclose(dico);
     return 1;
 }
+// Function to delete a word from the binary tree
+tree* deleteWord(tree* root, char word[], int wordIndex) {
+    if (root == NULL) {
+        // Word not found, return NULL
+        return NULL;
+    }
+
+    // If the current node's letter matches the current character of the word
+    if (root->letter == word[wordIndex]) {
+        // If it's the end of the word
+        if (word[wordIndex + 1] == '\0') {
+            // Mark the end of word node for deletion
+            root->left = NULL;
+        } else {
+            // Recursively delete next character in the word
+            root->left = deleteWord(root->left, word, wordIndex + 1);
+        }
+    }
+
+    // Recursively delete from left and right subtrees
+    root->left = deleteWord(root->left, word, wordIndex);
+    root->right = deleteWord(root->right, word, wordIndex);
+
+    // Check if current node has no children and it's not the end of a word
+    if (root->left == NULL && root->right == NULL && root->letter != '\0') {
+        // Free the memory and return NULL (deleting this node)
+        free(root);
+        return NULL;
+    }
+
+    return root;
+}
