@@ -301,3 +301,49 @@ tree* deleteWord(tree* root, char word[], int wordIndex) {
 
     return root;
 }
+
+
+void removeWordFromFileAndTree(const char *filename, const char *wordToRemove, tree **root) {
+    FILE *file = fopen(filename, "r+");
+    if (file == NULL) {
+        // File doesn't exist, delete from tree
+        *root = deleteWord(*root, wordToRemove, 0);
+        return;
+    }
+
+    FILE *tempFile = fopen("temp.txt", "w+");
+    if (tempFile == NULL) {
+        perror("Error creating temporary file");
+        fclose(file);
+        return;
+    }
+
+    char line[100]; // Adjust the size as per your need
+    int wordFound = 0;
+    while (fgets(line, sizeof(line), file)) {
+        char *word = strtok(line, " \t\n"); // Assuming space, tab, and newline as delimiters
+        if (strcmp(word, wordToRemove) != 0) {
+            fputs(line, tempFile);
+        } else {
+            wordFound = 1;
+        }
+    }
+
+    fclose(file);
+    fclose(tempFile);
+
+    if (remove(filename) != 0) {
+        perror("Error deleting file");
+        return;
+    }
+
+    if (rename("temp.txt", filename) != 0) {
+        perror("Error renaming file");
+        return;
+    }
+
+    if (!wordFound) {
+        // If word not found in file, delete from tree
+        *root = deleteWord(*root, wordToRemove, 0);
+    }
+}

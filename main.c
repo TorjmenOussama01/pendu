@@ -10,7 +10,7 @@
 
 // * Pointeur Global, utiliser pour la manipulation de l'arbre
 tree *dico;
-
+char filename[100];
 void handleInput()
 {
     // * Ne fonctionnera que sur des systèmes Linux, en cas de Windows
@@ -72,12 +72,18 @@ void handleInput()
             dico = arbreConsVide();
             break;
         case 8:
-        char wordToDelete[15]; // Assuming MAX_WORD_LENGTH is defined somewhere
-        printf("Enter the word you want to delete: ");
-        scanf("%s", wordToDelete);
-        dico = deleteWord(dico, wordToDelete, 0);
-        printf("Word '%s' deleted from the dictionary.\n", wordToDelete);
-        break;
+        
+            char wordToDelete[15]; // Assuming MAX_WORD_LENGTH is defined somewhere
+            printf("Enter the word you want to delete: ");
+            scanf("%s", wordToDelete);
+            printf("Enter the name of the file: ");
+            scanf("%s", filename);
+
+            // Call removeWordFromFileAndTree function
+            removeWordFromFileAndTree(filename, wordToDelete, &dico);
+
+            printf("Word '%s' deleted from the dictionary and file.\n", wordToDelete);
+
 
 
 
