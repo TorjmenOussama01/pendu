@@ -37,7 +37,7 @@ void handleInput()
             printf("Enter Option => ");
             scanf("%d", &option);
             counts++;
-        } while (option < 0 || option > 7);
+        } while (option < 0 || option > 8);
 
         switch (option)
         {
@@ -71,6 +71,15 @@ void handleInput()
             arbreSuppr(dico);
             dico = arbreConsVide();
             break;
+        case 8:
+        char wordToDelete[15]; // Assuming MAX_WORD_LENGTH is defined somewhere
+        printf("Enter the word you want to delete: ");
+        scanf("%s", wordToDelete);
+        dico = deleteWord(dico, wordToDelete, 0);
+        printf("Word '%s' deleted from the dictionary.\n", wordToDelete);
+        break;
+
+
 
         case 0:
             exit(0);

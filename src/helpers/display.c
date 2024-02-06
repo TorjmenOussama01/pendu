@@ -39,6 +39,8 @@ void printOptions()
     printSingleOption("5. Consulter le nombre d'occurence d'un mot", 4, 21, 0);
     printSingleOption("6. jeu de pendu", 4, 47, 0);
     printSingleOption("7. Vider l'arbre", 4, 48, 0);
+    printSingleOption("8. Supp un mot ", 4, 49, 0);
+
     printSingleOption(" ", 4, 63, 0);
     printSingleOption("0. Quitter", 4, 54, 1);
 }
