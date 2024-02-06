@@ -76,13 +76,10 @@ void handleInput()
             char wordToDelete[15]; // Assuming MAX_WORD_LENGTH is defined somewhere
             printf("Enter the word you want to delete: ");
             scanf("%s", wordToDelete);
-            printf("Enter the name of the file: ");
-            scanf("%s", filename);
-
             // Call removeWordFromFileAndTree function
-            removeWordFromFileAndTree(filename, wordToDelete, &dico);
+            removeWordFromFileAndTree( wordToDelete, &dico);
 
-            printf("Word '%s' deleted from the dictionary and file.\n", wordToDelete);
+            printf("Word '%s' deletede.\n", wordToDelete);
 
 
 
