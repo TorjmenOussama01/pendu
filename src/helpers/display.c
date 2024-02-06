@@ -163,14 +163,14 @@ tree *printRandomWord(tree *dico)
     system("clear");
     printHeader("Random Word Picker", 25);
     printCharactere(' ', 18);
-    if (choisirMot(buffer, niveau ,filename) == 1)
+   /* if (choisirMot(buffer, niveau ,filename) == 1)
     {
         playHangMan(buffer,niveau);
 
     }else{
     printf("\033[1;31mVeuillez vérifier le nom de fichier\033[0m");
     printFooter();
-    }
+    }*/
 
 
     return dico;

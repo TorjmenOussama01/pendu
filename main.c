@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+
 #include "headers/struct.h"
 #include "headers/display.h"
 #include "headers/tree.h"
@@ -59,11 +61,11 @@ void handleInput()
         case 5:
             printOccurrences(dico);
             break;
-
+/*
         case 6:
             dico = printRandomWord(dico);
             break;
-
+*/
         case 7:
             printEmptiedTree(dico);
             arbreSuppr(dico);
