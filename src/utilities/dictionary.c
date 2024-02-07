@@ -303,31 +303,33 @@ tree* deleteWord(tree* root, char word[], int wordIndex) {
 }
 
 
-
 void removeWordFromFile(const char *wordToRemove) {
     char filename[100];
     printf("Enter the name of the file: ");
-    scanf("%s", filename);
+    if (scanf("%99s", filename) != 1) {
+        printf("Error reading filename.\n");
+        return;
+    }
 
-    FILE *file = fopen(filename, "r+");
+    FILE *file = fopen(filename, "r");
     if (file == NULL) {
         perror("Error opening file");
         return;
     }
 
-    FILE *tempFile = fopen("temp.txt", "w+");
+    FILE *tempFile = fopen("temp.txt", "w");
     if (tempFile == NULL) {
         perror("Error creating temporary file");
         fclose(file);
         return;
     }
 
-    char line[100]; // Adjust the size as per your need
+    char word[100]; // Adjust the size as per your need
     int wordFound = 0;
-    while (fgets(line, sizeof(line), file)) {
-        char *word = strtok(line, " \t\n"); // Assuming space, tab, and newline as delimiters
+    while (fscanf(file, "%99s", word) != EOF) {
+        printf("Word read: %s\n", word); // Print the word read
         if (strcmp(word, wordToRemove) != 0) {
-            fputs(line, tempFile);
+            fprintf(tempFile, "%s\n", word); // Write word to temp file followed by newline
         } else {
             wordFound = 1;
         }
@@ -348,11 +350,8 @@ void removeWordFromFile(const char *wordToRemove) {
 
     if (!wordFound) {
         printf("Word '%s' not found in file.\n", wordToRemove);
-    } else {
-        printf("Word '%s' deleted from file.\n", wordToRemove);
-    }
+    } 
 }
-
 
 
 void removeWordFromTreeAndFile(tree **root) {
