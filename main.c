@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+
 #include "headers/struct.h"
 #include "headers/display.h"
 #include "headers/tree.h"
@@ -8,7 +10,7 @@
 
 // * Pointeur Global, utiliser pour la manipulation de l'arbre
 tree *dico;
-
+char filename[100];
 void handleInput()
 {
     // * Ne fonctionnera que sur des systèmes Linux, en cas de Windows
@@ -59,19 +61,25 @@ void handleInput()
         case 5:
             printOccurrences(dico);
             break;
-
+/*
         case 6:
             dico = printRandomWord(dico);
             break;
-
+*/
         case 7:
             printEmptiedTree(dico);
             arbreSuppr(dico);
             dico = arbreConsVide();
             break;
         case 8:
-            //chooseRandomWord(dico,1);
-            break;        
+        
+            char wordToDelete[15]; // Assuming MAX_WORD_LENGTH is defined somewhere
+            removeWordFromTreeAndFile(&dico);
+
+            break;
+
+
+
 
         case 0:
             exit(0);

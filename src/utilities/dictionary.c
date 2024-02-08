@@ -253,6 +253,119 @@ char* choisirMot(char *filename, int level) {
     }
     
     fclose(dico);
-    printf("Aucun mot trouvé pour ce niveau\n");
-    return NULL;
+    return 1;
+}
+// Function to delete a word from the binary tree
+tree* deleteWord(tree* root, char word[], int wordIndex) {
+    if (root == NULL) {
+        // Word not found, return NULL
+        return NULL;
+    }
+
+    // If the current node's letter matches the current character of the word
+    if (root->letter == word[wordIndex]) {
+        // If it's the end of the word
+        if (word[wordIndex + 1] == '\0') {
+            // Mark the end of word node for deletion
+            root->left = NULL;
+        } else {
+            // Recursively delete next character in the word
+            root->left = deleteWord(root->left, word, wordIndex + 1);
+        }
+    }
+
+    // Recursively delete from left and right subtrees
+    root->left = deleteWord(root->left, word, wordIndex);
+    root->right = deleteWord(root->right, word, wordIndex);
+
+    // Check if current node has no children and it's not the end of a word
+    if (root->left == NULL && root->right == NULL && root->letter != '\0') {
+        // Free the memory and return NULL (deleting this node)
+        free(root);
+        return NULL;
+    }
+
+    return root;
+}
+
+
+void removeWordFromFile(const char *wordToRemove) {
+    char filename[100];
+    printf("Enter the name of the file: ");
+    if (scanf("%99s", filename) != 1) {
+        printf("Error reading filename.\n");
+        return;
+    }
+
+    FILE *file = fopen(filename, "r");
+    if (file == NULL) {
+        perror("Error opening file");
+        return;
+    }
+
+    FILE *tempFile = fopen("temp.txt", "w");
+    if (tempFile == NULL) {
+        perror("Error creating temporary file");
+        fclose(file);
+        return;
+    }
+
+    char word[100]; // Adjust the size as per your need
+    int wordFound = 0;
+    while (fscanf(file, "%99s", word) != EOF) {
+        printf("Word read: %s\n", word); // Print the word read
+        if (strcmp(word, wordToRemove) != 0) {
+            fprintf(tempFile, "%s\n", word); // Write word to temp file followed by newline
+        } else {
+            wordFound = 1;
+        }
+    }
+
+    fclose(file);
+    fclose(tempFile);
+
+    if (remove(filename) != 0) {
+        perror("Error deleting file");
+        return;
+    }
+
+    if (rename("temp.txt", filename) != 0) {
+        perror("Error renaming file");
+        return;
+    }
+
+    if (!wordFound) {
+        printf("Word '%s' not found in file.\n", wordToRemove);
+    } 
+}
+
+
+void removeWordFromTreeAndFile(tree **root) {
+    int choice;
+    printf("Enter 1 to delete from binary tree, 2 to delete from file, 3 to delete from both: ");
+    scanf("%d", &choice);
+
+    char wordToDelete[15]; // Assuming MAX_WORD_LENGTH is defined somewhere
+    printf("Enter the word you want to delete: ");
+    scanf("%s", wordToDelete);
+
+    switch (choice) {
+        case 1:
+            // Delete from binary tree only
+            *root = deleteWord(*root, wordToDelete, 0);
+            printf("Word '%s' deleted from binary tree.\n", wordToDelete);
+            break;
+        case 2:
+            // Delete from file only
+            removeWordFromFile(wordToDelete);
+            break;
+        case 3:
+            // Delete from both binary tree and file
+            *root = deleteWord(*root, wordToDelete, 0);
+            removeWordFromFile(wordToDelete);
+            printf("Word '%s' deleted from binary tree and file.\n", wordToDelete);
+            break;
+        default:
+            printf("Invalid choice\n");
+    }
 }
