@@ -95,6 +95,7 @@ void handleInput()
 // ! system("clear") => system("cls")
 int main(int argc, char *argv[])
 {
+    srand(time(NULL));
     dico = arbreConsVide();
 
     // * Supposons que l'utilisateur a demandé de l'aide

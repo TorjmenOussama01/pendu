@@ -10,4 +10,4 @@ void removeWordFromTreeAndFile(tree **root);
 int dicoNbOcc(char *word, int wordIndex, tree *root);
 int dicoNbMotsDifferents(tree *root);
 int dicoNbMotsTotal(tree *root);
-int choisirMot(char *motChoisi,int niveau, char *filename);
+char* choisirMot(char *filename, int level);

@@ -3,7 +3,6 @@
 #include <string.h>
 #include "../../headers/struct.h"
 #include "../../headers/dictionary.h"
-#include "../../headers/HangMan.h"
 
 void printCharactere(char charactere, int number)
 {
@@ -37,7 +36,7 @@ void printOptions()
     printSingleOption("3. Afficher le nombre totales des mots", 4, 26, 0);
     printSingleOption("4. Afficher le nombre des mots differents", 4, 23, 0);
     printSingleOption("5. Consulter le nombre d'occurence d'un mot", 4, 21, 0);
-    printSingleOption("6. jeu de pendu", 4, 47, 0);
+    printSingleOption("6. Piocher un mot", 4, 47, 0);
     printSingleOption("7. Vider l'arbre", 4, 48, 0);
     printSingleOption("8. deleted from the dictionary and file ", 4, 49, 0);
 
@@ -147,7 +146,6 @@ tree *printRandomWord(tree *dico)
 {
     char filename[100];
     char buffer[100];
-    int niveau;
 
     do
     {
@@ -155,26 +153,22 @@ tree *printRandomWord(tree *dico)
         printf("Entrer le fichier => ");
         scanf("%s", filename);
     } while (strlen(filename) < 0 || strlen(filename) > 100);
-    do
-    {
-        printCharactere(' ', 4);
-        printf("choisir le niveau => ");
-        scanf("%d", niveau);
-    } while (niveau < 0 || niveau > 3);
 
     system("clear");
     printHeader("Random Word Picker", 25);
     printCharactere(' ', 18);
-   /* if (choisirMot(buffer, niveau ,filename) == 1)
+ /*   if (choisirMot(buffer, filename) == 1)
     {
-        playHangMan(buffer,niveau);
+        printf("\033[0;32mMot ajouté avec success, le mot est \033[0;35m%s\033[0m", buffer);
+        printFooter();
 
-    }else{
+        return dicoInsererMot(buffer, dico, 0);
+    }
+
+
     printf("\033[1;31mVeuillez vérifier le nom de fichier\033[0m");
-    printFooter();
-    }*/
-
-
+    printFooter();*/
+    printf("\033[0;32mMot choisi: \033[0;35m%s\033[0m", choisirMot(filename,1));
     return dico;
 }
 

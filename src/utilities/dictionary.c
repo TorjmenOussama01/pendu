@@ -198,74 +198,60 @@ int nombreAleatoire(int nombreMax)
     return (rand() % nombreMax);
 }
 
-int choisirMot(char *motChoisi, int niveau, char *filename) {
+char* choisirMot(char *filename, int level) {
     FILE *dico = NULL;
-    int nombreMots = 0, numMotChoisi = 0;
-    int caractereLu = 0;
-    int longueurMin = 0, longueurMax = 0;
-
-    // Définir les longueurs maximales en fonction du niveau
-    switch (niveau) {
+    char mot[100];
+    int min_length, max_length;
+    int line_count = 0, chosen_line;
+    dico = fopen(filename, "r");
+    
+    if (dico == NULL) {
+        printf("Erreur lors de l'ouverture du fichier\n");
+        return NULL;
+    }
+    
+    switch(level) {
         case 1:
-            longueurMin = 1;
-            longueurMax = 5;
+            min_length = 2;
+            max_length = 6;
             break;
         case 2:
-            longueurMin = 6;
-            longueurMax = 8;
+            min_length = 6;
+            max_length = 8;
             break;
         case 3:
-            longueurMin = 9; // Pour le niveau 3, toutes les longueurs supérieures à 8
+            min_length = 9;
+            max_length = 100; // Assuming maximum word length is 100
             break;
         default:
-            return 0; // Retourner 0 si le niveau est invalide
+            printf("Niveau non valide\n");
+            fclose(dico);
+            return NULL;
     }
-
-    dico = fopen(filename, "r");
-    if (dico == NULL) {
-        return 0;
-    }
-
-    // Compter le nombre de mots dans le fichier
-    do {
-        caractereLu = fgetc(dico);
-        if (caractereLu == '\n')
-            nombreMots++;
-    } while (caractereLu != EOF);
-
-    numMotChoisi = nombreAleatoire(nombreMots);
-
-    // Remettre le curseur au début du fichier
-    rewind(dico);
-
-    // Parcourir le fichier pour trouver le mot approprié
-    while (numMotChoisi > 0) {
-        caractereLu = fgetc(dico);
-        if (caractereLu == '\n')
-            numMotChoisi--;
-    }
-
-    // Lire le mot choisi
-    fgets(motChoisi, 100, dico);
-
-    // Retirer le caractère de nouvelle ligne à la fin
-    motChoisi[strlen(motChoisi) - 1] = '\0';
-
-    // Vérifier si la longueur du mot est dans la plage souhaitée
-    while (strlen(motChoisi) < longueurMin || strlen(motChoisi) > longueurMax) {
-        // Si la longueur n'est pas dans la plage souhaitée, choisir un autre mot
-        numMotChoisi = nombreAleatoire(nombreMots);
-        rewind(dico);
-        while (numMotChoisi > 0) {
-            caractereLu = fgetc(dico);
-            if (caractereLu == '\n')
-                numMotChoisi--;
+    
+    srand(time(NULL)); // Seed random number generator
+    
+    while (fgets(mot, sizeof(mot), dico) != NULL) {
+        line_count++;
+        if (strlen(mot) >= min_length && strlen(mot) <= max_length) {
+            if (rand() % line_count == 0) {
+                chosen_line = line_count;
+            }
         }
-        fgets(motChoisi, 100, dico);
-        motChoisi[strlen(motChoisi) - 1] = '\0';
     }
-
-    // Fermer le fichier
+    
+    rewind(dico);
+    line_count = 0;
+    
+    while (fgets(mot, sizeof(mot), dico) != NULL) {
+        line_count++;
+        if (line_count == chosen_line) {
+            mot[strlen(mot) - 1] = '\0'; // Remove newline character
+            fclose(dico);
+            return strdup(mot); // Return dynamically allocated copy of the word
+        }
+    }
+    
     fclose(dico);
     return 1;
 }
