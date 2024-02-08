@@ -3,6 +3,18 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <tree.h>
+
+// tree + word 
+// decomposing that word into  keys nodes in the tree 
+
+// taking input from the user, letter , 
+//  if the letter, is in the word, then, showcase the letter in all the positions , and delete that letter , from the world 
+// else , draw the part of the hangman 
+
+char test[] = "test";
+
+
 
 bool is_word_guessed(char *word, char guessed_letters[]) {
     // Check if all the letters in the word have been guessed.
@@ -122,3 +134,69 @@ void playHangMan(char word, int niveau) {
         printf("You lose! The word was: %s\n", word);
     }
   }
+
+
+/*
+
+functionality protoype 
+void playGame(struct TreeNode* root, char *word);
+char getInput();
+void deleteLetterFromTree(struct TreeNode** root, char letter);
+
+// Function to play the game
+void playGame(struct TreeNode* root, char *word) {
+    // Initialize the game state
+    int lives = 6;
+    char guessed_letters[26]; // Assuming only lowercase letters will be guessed
+    memset(guessed_letters, '\0', sizeof(guessed_letters));
+
+    // Play the game
+    while (lives > 0) {
+        // Get a letter from the user
+        char letter = getInput();
+
+        // Check if the letter is in the word
+        if (strchr(word, letter) != NULL) {
+            // Letter is in the word, delete it from the binary tree
+            deleteLetterFromTree(&root, letter);
+            
+            // Print the updated binary tree
+            // Your code to print the binary tree here
+
+            // Add the letter to the list of guessed letters
+            guessed_letters[letter - 'a'] = letter;
+
+            // Check if the word is guessed
+            if (strspn(word, guessed_letters) == strlen(word)) {
+                printf("You win!\n");
+                return;
+            }
+        } else {
+            // Letter is not in the word, decrement the number of lives
+            lives--;
+
+            // Draw the hangman
+            // Your code to draw the hangman here
+        }
+    }
+
+    // Ran out of lives
+    printf("You lose! The word was: %s\n", word);
+}
+
+// Function to get input from the user
+char getInput() {
+    char input;
+    printf("Enter a letter: ");
+    scanf(" %c", &input);
+    return input;
+}
+
+// Function to delete a letter from the binary tree
+void deleteLetterFromTree(struct TreeNode** root, char letter) {
+    // Your code to delete the letter from the binary tree here
+}
+
+
+
+*/
