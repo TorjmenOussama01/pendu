@@ -20,23 +20,29 @@ mouton
 poule
 Paris
 Londres
-New York
+New
+York
 Tokyo
 Sydney
 Rome
 Berlin
 Moscou
 Pékin
-Le Caire
-Rio de Janeiro
-Los Angeles
+Le
+Caire
+Rio
+de
+Janeiro
+Los
+Angeles
 Mumbai
 Istanbul
 Bangkok
 Madrid
 Amsterdam
 Toronto
-Buenos Aires
+Buenos
+Aires
 Dubaï
 médecin
 enseignant
@@ -71,19 +77,21 @@ soupe
 crêpe
 riz
 pâtes
-crème glacée
+crème
+glacée
 chocolat
 fromage
 pain
 yaourt
-fruits de mer
+fruits
+de
+mer
 légumes
 football
 basketball
 tennis
 baseball
 golf
-natation
 cyclisme
 rugby
 hockey
@@ -98,3 +106,4 @@ course
 plongée
 équitation
 yoga
+natation
