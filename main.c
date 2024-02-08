@@ -35,7 +35,7 @@ void handleInput()
             printf("Enter Option => ");
             scanf("%d", &option);
             counts++;
-        } while (option < 0 || option > 7);
+        } while (option < 0 || option > 8);
 
         switch (option)
         {
@@ -69,6 +69,9 @@ void handleInput()
             arbreSuppr(dico);
             dico = arbreConsVide();
             break;
+        case 8:
+            //chooseRandomWord(dico,1);
+            break;        
 
         case 0:
             exit(0);
@@ -84,6 +87,7 @@ void handleInput()
 // ! system("clear") => system("cls")
 int main(int argc, char *argv[])
 {
+    srand(time(NULL));
     dico = arbreConsVide();
 
     // * Supposons que l'utilisateur a demandé de l'aide
