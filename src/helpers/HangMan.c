@@ -76,6 +76,23 @@ bool is_word_guessed(char *word, char guessed_letters[]) {
     return true;
 }
 
+
+bool is_word_guessed_tree(tree *root, char guessed_letters[]) {
+    // Base case: If the root is NULL, the tree is empty
+    if (root == NULL) {
+        return true; // An empty tree is considered guessed
+    }
+
+    // If the current node's letter is not guessed, return false
+    if (root->letter != ' ' && guessed_letters[root->letter - 'a'] == '\0') {
+        return false;
+    }
+
+    // Recursively check in the left and right subtrees
+    return is_word_guessed_tree(root->left, guessed_letters) &&
+           is_word_guessed_tree(root->right, guessed_letters);
+}
+
 bool is_letter_in_word(char *word, char letter) {
     // Check if the letter is in the word.
     for (int i = 0; word[i] != '\0'; i++) {
@@ -183,7 +200,7 @@ void updateHangmanState(tree *root, char letter, char guessed_letters[], int *li
 
 bool checkGameOverCondition(tree *root, char guessed_letters[], int lives) {
     // Check if all the letters in the word have been guessed
-    if (is_word_guessed_tree(root, guessed_letters)) {
+    if (is_word_guessed(root, guessed_letters)) {
         printf("Congratulations! You guessed the word!\n");
         return true;
     }
@@ -200,6 +217,16 @@ bool checkGameOverCondition(tree *root, char guessed_letters[], int lives) {
     return false;
 }
 
+void printWord(tree *root) {
+    if (root == NULL) {
+        return;
+    }
+
+    // Traverse the binary tree in-order to print the word
+    printWord(root->left);
+    printf("%c", root->letter);
+    printWord(root->right);
+}
 
 void playHangMan(tree *root, int niveau) {
     // Initialize the game.
