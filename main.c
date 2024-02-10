@@ -37,7 +37,7 @@ void handleInput()
             printf("Enter Option => ");
             scanf("%d", &option);
             counts++;
-        } while (option < 0 || option > 9);
+        } while (option < 0 || option > 12);
 
         switch (option)
         {
@@ -86,6 +86,7 @@ void handleInput()
             chooseRandomWord(dico);
             break;      
         case 10:
+
             playHangman();
             break;      
 

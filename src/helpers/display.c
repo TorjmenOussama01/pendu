@@ -39,6 +39,9 @@ void printOptions()
     printSingleOption("6. Piocher un mot", 4, 47, 0);
     printSingleOption("7. Vider l'arbre", 4, 48, 0);
     printSingleOption("8. deleted from the dictionary and file ", 4, 49, 0);
+    printSingleOption("9. chooseRandomWord(dico); choose random word ! ", 4, 49, 0);
+    printSingleOption("10.playHangman(); Play hangman functionality ", 4, 49, 0);
+    printSingleOption("11. deleted from the dictionary and file ", 4, 49, 0);
 
     printSingleOption(" ", 4, 63, 0);
     printSingleOption("0. Quitter", 4, 54, 1);
