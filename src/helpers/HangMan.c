@@ -4,6 +4,7 @@
 #include <time.h>
 #include <string.h>
 #include "../../headers/tree.h"
+#include "../../headers/dictionary.h"
 const MAX_WORD_LENGTH = 10 ; 
 const MAX_LIVES = 6 ;
 char test[] = "test";
@@ -23,7 +24,7 @@ void initializeHangman(char **randomWord, tree **treeRoot) {
 
     // Select a random word from the constructed tree
     *randomWord = (char *)malloc(MAX_WORD_LENGTH * sizeof(char));
-    chooseRandomWord(*treeRoot, *randomWord);
+    chooseRandomWord(*treeRoot);
 
     // Initialize other Hangman game state variables
     int lives = MAX_LIVES;
