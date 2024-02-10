@@ -343,6 +343,37 @@ void removeWordFromFile(const char *wordToRemove) {
 }
 
 
+void removeWordFromTreeAndFile(tree **root) {
+    int choice;
+    printf("Enter 1 to delete from binary tree, 2 to delete from file, 3 to delete from both: ");
+    scanf("%d", &choice);
+
+    char wordToDelete[15]; // Assuming MAX_WORD_LENGTH is defined somewhere
+    printf("Enter the word you want to delete: ");
+    scanf("%s", wordToDelete);
+
+    switch (choice) {
+        case 1:
+            // Delete from binary tree only
+            *root = deleteWord(*root, wordToDelete, 0);
+            printf("Word '%s' deleted from binary tree.\n", wordToDelete);
+            break;
+        case 2:
+            // Delete from file only
+            removeWordFromFile(wordToDelete);
+            break;
+        case 3:
+            // Delete from both binary tree and file
+            *root = deleteWord(*root, wordToDelete, 0);
+            removeWordFromFile(wordToDelete);
+            printf("Word '%s' deleted from binary tree and file.\n", wordToDelete);
+            break;
+        default:
+            printf("Invalid choice\n");
+    }
+}
+
+
 // Function to choose a random word from the tree
 void chooseRandomWord(tree *node) {
     if (node == NULL)
