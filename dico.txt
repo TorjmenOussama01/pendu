@@ -106,5 +106,4 @@ athlétisme
 course
 plongée
 équitation
-yoga
-natation
+casque

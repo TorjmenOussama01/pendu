@@ -37,7 +37,7 @@ void handleInput()
             printf("Enter Option => ");
             scanf("%d", &option);
             counts++;
-        } while (option < 0 || option > 8);
+        } while (option < 0 || option > 9);
 
         switch (option)
         {
@@ -80,6 +80,11 @@ void handleInput()
 
 
 
+            //dico = createTreeByLevel(dico,1);
+            //break;  
+        case 9:
+            chooseRandomWord(dico);
+            break;      
 
         case 0:
             exit(0);

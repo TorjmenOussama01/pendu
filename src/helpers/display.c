@@ -69,7 +69,7 @@ void printToConsole()
 
 void printDictionary(tree *dico, char path[], int wordLen)
 {
-    system("clear");
+    //system("clear");
     printHeader("Current Dictionary", 25);
     if (dico == NULL)
     {
@@ -92,7 +92,7 @@ void printDictionary(tree *dico, char path[], int wordLen)
         scanf("%d", &option);
     } while (option != 0);
 
-    system("clear");
+   // system("clear");
 }
 
 void printDifferentWords(tree *dico)

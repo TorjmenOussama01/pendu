@@ -11,3 +11,5 @@ int dicoNbOcc(char *word, int wordIndex, tree *root);
 int dicoNbMotsDifferents(tree *root);
 int dicoNbMotsTotal(tree *root);
 char* choisirMot(char *filename, int level);
+tree *createTreeByLevel(tree *dico,int level);
+void chooseRandomWord(tree *node);
