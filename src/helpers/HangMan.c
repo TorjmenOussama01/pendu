@@ -14,6 +14,63 @@
 
 char test[] = "test";
 
+// initialization of the game : 
+// Function to initialize the Hangman game
+char *initializeHangman() {
+    // Initialize the Hangman game state
+    int lives = 6;
+    char guessed_letters[26]; // Assuming only lowercase letters will be guessed
+    memset(guessed_letters, '\0', sizeof(guessed_letters));
+
+    // Select a random word from the dictionary
+    char *word = chooseWord("dictionary.txt"); // Adjust the filename as needed
+
+    // Print initial game state (optional)
+    printf("Hangman Game Initialized.\n");
+    printf("Word to guess: %s\n", word);
+    printf("Number of lives: %d\n", lives);
+    printf("\n");
+
+    return word;
+}
+
+
+
+
+// functionality to take the user input , of guessing the letter
+char takeUserInput() {
+    char letter;
+    printf("Enter a letter guess (a-z): ");
+    scanf(" %c", &letter);
+
+    // Validate the input to ensure it's a valid lowercase letter
+    while ((letter < 'a' || letter > 'z')) {
+        printf("Invalid input! Please enter a lowercase letter (a-z): ");
+        scanf(" %c", &letter);
+    }
+
+    return letter;
+}
+
+
+bool checkLetterInWord(tree *root, char letter) {
+    // Base case: If the root is NULL, the tree is empty
+    if (root == NULL) {
+        return false;
+    }
+
+    // If the current node's letter matches the guessed letter
+    if (root->letter == letter) {
+        return true;
+    }
+
+    // Recursively check in the left and right subtrees
+    bool inLeftSubtree = checkLetterInWord(root->left, letter);
+    bool inRightSubtree = checkLetterInWord(root->right, letter);
+
+    // Return true if the letter is found in either subtree
+    return inLeftSubtree || inRightSubtree;
+}
 
 
 bool is_word_guessed(char *word, char guessed_letters[]) {
@@ -135,68 +192,34 @@ void playHangMan(char word, int niveau) {
     }
   }
 
-
 /*
+Initialize Hangman Game:
 
-functionality protoype 
-void playGame(struct TreeNode* root, char *word);
-char getInput();
-void deleteLetterFromTree(struct TreeNode** root, char letter);
+initializeHangman: Function to initialize the Hangman game, including setting up the initial state of the Hangman (e.g., number of lives, empty guessed letters array) and selecting a random word from the dictionary.
+Display Hangman State:
 
-// Function to play the game
-void playGame(struct TreeNode* root, char *word) {
-    // Initialize the game state
-    int lives = 6;
-    char guessed_letters[26]; // Assuming only lowercase letters will be guessed
-    memset(guessed_letters, '\0', sizeof(guessed_letters));
+displayHangmanState: Function to display the current state of the Hangman, including the Hangman figure representing the number of lives remaining.
+Take User Input:
 
-    // Play the game
-    while (lives > 0) {
-        // Get a letter from the user
-        char letter = getInput();
+takeUserInput: Function to prompt the user to input a letter guess and validate the input (e.g., check if it's a valid lowercase letter).
+Check Letter in Word:
 
-        // Check if the letter is in the word
-        if (strchr(word, letter) != NULL) {
-            // Letter is in the word, delete it from the binary tree
-            deleteLetterFromTree(&root, letter);
-            
-            // Print the updated binary tree
-            // Your code to print the binary tree here
+checkLetterInWord: Function to check if the guessed letter is present in the selected word.
+Update Hangman State:
 
-            // Add the letter to the list of guessed letters
-            guessed_letters[letter - 'a'] = letter;
+updateHangmanState: Function to update the Hangman state based on the correctness of the guessed letter.
+If the letter is correct, update the guessed letters array and remove the letter from the binary tree representing the word.
+If the letter is incorrect, decrement the number of lives remaining.
+Check Game Over Condition:
 
-            // Check if the word is guessed
-            if (strspn(word, guessed_letters) == strlen(word)) {
-                printf("You win!\n");
-                return;
-            }
-        } else {
-            // Letter is not in the word, decrement the number of lives
-            lives--;
+isGameOver: Function to check if the game is over (either the word is guessed completely or the player runs out of lives).
+Main Game Loop:
 
-            // Draw the hangman
-            // Your code to draw the hangman here
-        }
-    }
+mainGameLoop: Main loop to repeatedly take user input, check the letter in the word, update the Hangman state, and check the game over condition until the game ends.
+Display Game Outcome:
 
-    // Ran out of lives
-    printf("You lose! The word was: %s\n", word);
-}
+displayGameOutcome: Function to display the outcome of the game (e.g., if the player wins by guessing the word or loses by running out of lives).
+Cleanup Resources:
 
-// Function to get input from the user
-char getInput() {
-    char input;
-    printf("Enter a letter: ");
-    scanf(" %c", &input);
-    return input;
-}
-
-// Function to delete a letter from the binary tree
-void deleteLetterFromTree(struct TreeNode** root, char letter) {
-    // Your code to delete the letter from the binary tree here
-}
-
-
-
+cleanupResources: Function to clean up any resources used during the game (e.g., free memory allocated for the binary tree).
 */
