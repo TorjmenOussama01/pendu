@@ -318,85 +318,30 @@ void removeWordFromFile(const char *wordToRemove) {
             fprintf(tempFile, "%s\n", word); // Write word to temp file followed by newline
         } else {
             wordFound = 1;
-    printf("Aucun mot trouvé pour ce niveau\n");
-    return NULL;
-}
+        }
+    }
 
-    fclose(tempFile);
+    fclose(file); // Close the input file
+    fclose(tempFile); // Close the temporary file
 
+    // Remove the original file
     if (remove(filename) != 0) {
         perror("Error deleting file");
         return;
     }
 
+    // Rename the temporary file to the original filename
     if (rename("temp.txt", filename) != 0) {
         perror("Error renaming file");
         return;
     }
 
+    // Notify if the word was not found in the file
     if (!wordFound) {
         printf("Word '%s' not found in file.\n", wordToRemove);
-    } 
-}
-
-
-void removeWordFromTreeAndFile(tree **root) {
-    int choice;
-    printf("Enter 1 to delete from binary tree, 2 to delete from file, 3 to delete from both: ");
-    scanf("%d", &choice);
-
-    char wordToDelete[15]; // Assuming MAX_WORD_LENGTH is defined somewhere
-    printf("Enter the word you want to delete: ");
-    scanf("%s", wordToDelete);
-
-    switch (choice) {
-        case 1:
-            // Delete from binary tree only
-            *root = deleteWord(*root, wordToDelete, 0);
-            printf("Word '%s' deleted from binary tree.\n", wordToDelete);
-            break;
-        case 2:
-            // Delete from file only
-            removeWordFromFile(wordToDelete);
-            break;
-        case 3:
-            // Delete from both binary tree and file
-            *root = deleteWord(*root, wordToDelete, 0);
-            removeWordFromFile(wordToDelete);
-            printf("Word '%s' deleted from binary tree and file.\n", wordToDelete);
-            break;
-        default:
-            printf("Invalid choice\n");
     }
 }
 
-// Function to choose a random word from the tree
-/*void chooseRandomWord(tree *node)
-{
-    char word[100];
-    int wordLen=0;
-    if (node == NULL)
-        return;
-    // * Sinon, on ajoute la lettre dans un tableau et on incémente son indice
-    while (node->letter != '\0')
-    {
-        int random= rand() % 2;
-        if (node->letter != '\0' && random == 0)
-        {
-        word[wordLen] = node->letter;
-        wordLen++;
-        node=node->left;
-        }
-        else if (node->letter != '\0' && random != 0)
-        {
-        wordLen--;
-        node=node->right;
-        }
-    }
-
-    printArray(word, wordLen);
-    return word;
-}*/
 
 // Function to choose a random word from the tree
 void chooseRandomWord(tree *node) {
@@ -474,6 +419,90 @@ tree *createTreeByLevel(tree *dico,int level)
     printFooter();
             char path[100];
             printDictionary(dico, path, 0);  
+    
+    return dico;
+}
+
+
+
+
+///* commented functionality above 
+
+// Function to choose a random word from the tree
+/*void chooseRandomWord(tree *node)
+    /*{
+    char word[100];
+    int wordLen=0;
+    if (node == NULL)
+        return;
+    // * Sinon, on ajoute la lettre dans un tableau et on incémente son indice
+    while (node->letter != '\0')
+    {
+        int random= rand() % 2;
+        if (node->letter != '\0' && random == 0)
+        {
+        word[wordLen] = node->letter;
+        wordLen++;
+        node=node->left;
+        }
+        else if (node->letter != '\0' && random != 0)
+        {
+        wordLen--;
+        node=node->right;
+        }
+    }
+
+    printArray(word, wordLen);
+    return word;
+}*/
+
+
+// old commentede functionalit of create tree by level 
+//* tree *createTreeByLevel(tree *dico,int level)
+  /*  {
+    char filename[100];
+
+    do
+    {
+        printCharactere(' ', 4);
+        printf("Entrer nom fichier => ");
+        scanf("%s", filename);
+    } while (strlen(filename) < 0 || strlen(filename) > 100);
+
+    FILE *file = fopen(filename, "r");
+
+    system("clear");
+    printHeader("Insertion Options", 25);
+    printCharactere(' ', 18);
+
+    if (!file)
+    {
+        printf("\033[1;31mVeuillez vérifier le nom de fichier\033[0m");
+        printFooter();
+
+        return dico;
+    }
+
+    char line[500];
+
+    while (fgets(line, sizeof(line), file))
+    {
+        int wordLen = strlen(line);
+        if ((level == 1 && wordLen >= 2 && wordLen <= 5) ||
+            (level == 2 && wordLen >= 6 && wordLen <= 8) ||
+            (level == 3 && (wordLen > 8))) {
+        line[strlen(line) - 1] = '\0';
+        dico = dicoInsererMot(line, dico, 0);                
+
+        }
+    }
+
+    fclose(file);
+
+    printf("\033[0;32mMots ajouté avec success\033[0m");
+    printFooter();
+            char path[100];
+            printDictionary(dico, path, 0);  
     /*
     // Print the random word
     if (randomWord != NULL)
@@ -482,9 +511,8 @@ tree *createTreeByLevel(tree *dico,int level)
         printf("The tree is empty.\n");
 
     // Free memory allocated for the random word
-    free(randomWord);  */
+    free(randomWord);  
 
     return dico;
-}
-
+}*/
 
