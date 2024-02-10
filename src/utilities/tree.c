@@ -65,3 +65,4 @@ void arbreSuppr(tree *root)
     arbreSuppr(root->right);
     free(root);
 }
+

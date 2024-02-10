@@ -148,20 +148,37 @@ void draw_hangman(int lives) {
     }
 }
 
-// Function to update the Hangman state based on the correctness of the guessed letter
-void updateHangmanState(tree **root, char letter, char guessed_letters[], int *lives) {
-    // Check if the guessed letter is present in the word
-    if (checkLetterInWord(*root, letter)) {
-        // Update the guessed letters array
-        guessed_letters[letter - 'a'] = letter;
-        
-        // Remove the letter from the binary tree representing the word
-        removeLetterFromTree(root, letter);
-    } else {
-        // Decrement the number of lives
+
+// Helper function to traverse the binary tree and update guessed letters
+void traverseInOrder(tree *root, char guessed_letters[], bool *letterGuessedCorrectly, char letter) {
+    if (root != NULL) {
+        traverseInOrder(root->left, guessed_letters, letterGuessedCorrectly, letter);
+
+        // Check if the current node's letter matches the guessed letter
+        if (root->letter == letter) {
+            // Update the guessed letters array to reveal the occurrence of the guessed letter
+            guessed_letters[letter - 'a'] = letter;
+            *letterGuessedCorrectly = true;
+        }
+
+        traverseInOrder(root->right, guessed_letters, letterGuessedCorrectly, letter);
+    }
+}
+
+
+void updateHangmanState(tree *root, char letter, char guessed_letters[], int *lives) {
+    bool letterGuessedCorrectly = false;
+
+    // Iterate through the word stored in the binary tree
+    traverseInOrder(root, guessed_letters, &letterGuessedCorrectly, letter);
+
+    if (!letterGuessedCorrectly) {
+        // Decrement the number of lives if the letter is incorrect
         (*lives)--;
     }
 }
+
+
 
 
 bool checkGameOverCondition(tree *root, char guessed_letters[], int lives) {
