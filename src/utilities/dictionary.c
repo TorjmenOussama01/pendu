@@ -376,9 +376,9 @@ void removeWordFromTreeAndFile(tree **root) {
 
 
 // Function to choose a random word from the tree
-void chooseRandomWord(tree *node) {
+char* chooseRandomWord(tree *node) {
     if (node == NULL)
-        return;
+        return NULL;
 
     srand(time(NULL));
     char word[100];
@@ -395,13 +395,14 @@ void chooseRandomWord(tree *node) {
         }
     }
 
-    // Print the chosen random word
-    if (wordLen > 0) {
-        word[wordLen] = '\0';
-        printf("Random Word: %s\n", word);
-    } else {
-        printf("No word found.\n");
+    // Create a copy of the chosen random word to return
+    char* randomWord = (char*)malloc((wordLen + 1) * sizeof(char));
+    if (randomWord != NULL) {
+        strncpy(randomWord, word, wordLen);
+        randomWord[wordLen] = '\0';
     }
+
+    return randomWord;
 }
 
 

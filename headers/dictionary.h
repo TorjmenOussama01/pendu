@@ -12,4 +12,4 @@ int dicoNbMotsDifferents(tree *root);
 int dicoNbMotsTotal(tree *root);
 char* choisirMot(char *filename, int level);
 tree *createTreeByLevel(tree *dico,int level);
-void chooseRandomWord(tree *node);
+char* chooseRandomWord(tree *node);

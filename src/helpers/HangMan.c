@@ -5,13 +5,14 @@
 #include <string.h>
 #include "../../headers/tree.h"
 #include "../../headers/dictionary.h"
+
 const MAX_WORD_LENGTH = 10 ; 
 const MAX_LIVES = 6 ;
 char test[] = "test";
 
 // initialization of the game : 
 // Function to initialize the Hangman game
-void initializeHangman(char **randomWord, tree **treeRoot) {
+char* initializeHangman(tree **treeRoot) {
     // Prompt the user to choose the level
     int level;
     do {
@@ -23,20 +24,20 @@ void initializeHangman(char **randomWord, tree **treeRoot) {
     *treeRoot = createTreeByLevel(NULL, level);
 
     // Select a random word from the constructed tree
-    *randomWord = (char *)malloc(MAX_WORD_LENGTH * sizeof(char));
-    chooseRandomWord(*treeRoot);
-
-    // Initialize other Hangman game state variables
-    int lives = MAX_LIVES;
-    //memset(guessed_letters, '\0', sizeof(guessed_letters));
+    char *randomWord = chooseRandomWord(*treeRoot);
+    if (randomWord == NULL) {
+        printf("Error: Failed to choose a random word.\n");
+        return NULL;
+    }
 
     // Print initial game state
     printf("Hangman Game Initialized.\n");
-    printf("Word to guess: %s\n", *randomWord);
-    printf("Number of lives: %d\n", lives);
+    printf("Word to guess: %s\n", randomWord);
+    printf("Number of lives: %d\n", MAX_LIVES);
     printf("\n");
-}
 
+    return randomWord;
+}
 
 
 // functionality to take the user input , of guessing the letter
@@ -193,23 +194,44 @@ void traverseInOrder(tree *root, char guessed_letters[], bool *letterGuessedCorr
 
 
 void updateHangmanState(tree *root, char letter, char guessed_letters[], int *lives) {
+    // Mark the guessed letter as already guessed
+    guessed_letters[letter - 'a'] = letter;
+
+    // Display all occurrences of the guessed letter in the word
+    printf("Occurrences of '%c' in the word: ", letter);
     bool letterGuessedCorrectly = false;
-
-    // Iterate through the word stored in the binary tree
     traverseInOrder(root, guessed_letters, &letterGuessedCorrectly, letter);
+    printf("\n");
 
+    // Check if the guessed letter is in the word
     if (!letterGuessedCorrectly) {
-        // Decrement the number of lives if the letter is incorrect
+        // Decrement lives if the guessed letter is incorrect
         (*lives)--;
+        printf("Incorrect guess! You have %d lives remaining.\n", *lives);
+    } else {
+        printf("Correct guess!\n");
     }
 }
 
+void displayOccurrences(tree *root, char letter) {
+    if (root == NULL) {
+        return;
+    }
+
+    displayOccurrences(root->left, letter);
+
+    if (root->letter == letter) {
+        printf("%c ", root->letter);
+    }
+
+    displayOccurrences(root->right, letter);
+}
 
 
 
 bool checkGameOverCondition(tree *root, char guessed_letters[], int lives) {
     // Check if all the letters in the word have been guessed
-    if (is_word_guessed(root, guessed_letters)) {
+    if (is_word_guessed_tree(root, guessed_letters)) {
         printf("Congratulations! You guessed the word!\n");
         return true;
     }
@@ -241,17 +263,23 @@ void printWord(tree *root) {
 
 void playHangman() {
     // Initialize the Hangman game state
-    char *word;
     tree *root;
-    initializeHangman(&word, &root);
+    char *word = initializeHangman(&root);
+    if (word == NULL) {
+        printf("Error: Failed to initialize Hangman game.\n");
+        return;
+    }
+
     int lives = MAX_LIVES;
     char guessed_letters[26];
     memset(guessed_letters, '\0', sizeof(guessed_letters));
 
     // Convert the word to lowercase for consistency
-    for (int i = 0; word[i] != '\0'; i++) {
-        word[i] = tolower(word[i]);
+    char *lowercaseWord = strdup(word);
+    for (int i = 0; lowercaseWord[i] != '\0'; i++) {
+        lowercaseWord[i] = tolower(lowercaseWord[i]);
     }
+    printf("Randomly chosen word: %s\n", lowercaseWord);
 
     // Main game loop
     while (lives > 0 && !is_word_guessed_tree(root, guessed_letters)) {
@@ -272,31 +300,21 @@ void playHangman() {
         // Get user input for a letter guess
         char letter = takeUserInput();
 
-        // Check if the guessed letter is in the word
-        if (checkLetterInWord(root, letter)) {
-            // Update Hangman state based on the correctness of the guessed letter
-            updateHangmanState(root, letter, guessed_letters, &lives);
-
-            // Check if the word is fully guessed
-            if (is_word_guessed_tree(root, guessed_letters)) {
-                printf("Congratulations! You guessed the word!\n");
-                break;
-            }
-        } else {
-            // Decrement lives if the guessed letter is incorrect
-            lives--;
-            printf("Incorrect guess! You have %d lives remaining.\n", lives);
-        }
+        // Update Hangman state based on the correctness of the guessed letter
+        updateHangmanState(root, letter, guessed_letters, &lives);
     }
 
     // Game over: player either won or lost
     if (lives == 0) {
-        printf("You lose! The word was: %s\n", word);
+        printf("You lose! The word was: %s\n", lowercaseWord);
+    } else {
+        printf("Congratulations! You guessed the word!\n");
     }
 
     // Free memory allocated for the tree
     arbreSuppr(root);
     free(word);
+    free(lowercaseWord);
 }
 
 
@@ -322,7 +340,32 @@ Display game over message
 Prompt to play again or exit
 
  * 
- * 
+ * char* initializeHangman(tree **treeRoot) {
+    // Prompt the user to choose the level
+    int level;
+    do {
+        printf("Choose the level (1, 2, or 3): ");
+        scanf("%d", &level);
+    } while (level < 1 || level > 3);
+
+    // Construct the binary tree based on the chosen level
+    *treeRoot = createTreeByLevel(NULL, level);
+
+    // Select a random word from the constructed tree
+    char *randomWord = chooseRandomWord(*treeRoot);
+    if (randomWord == NULL) {
+        printf("Error: Failed to choose a random word.\n");
+        return NULL;
+    }
+
+    // Print initial game state
+    printf("Hangman Game Initialized.\n");
+    printf("Word to guess: %s\n", randomWord);
+    printf("Number of lives: %d\n", MAX_LIVES);
+    printf("\n");
+
+    return randomWord;
+}
  * 
  * 
 */
