@@ -4,29 +4,37 @@
 #include <time.h>
 #include <string.h>
 #include "../../headers/tree.h"
-
+const MAX_WORD_LENGTH = 10 ; 
+const MAX_LIVES = 6 ;
 char test[] = "test";
 
 // initialization of the game : 
 // Function to initialize the Hangman game
-char *initializeHangman() {
-    // Initialize the Hangman game state
-    int lives = 6;
-    char guessed_letters[26]; // Assuming only lowercase letters will be guessed
-    memset(guessed_letters, '\0', sizeof(guessed_letters));
+void initializeHangman(char **randomWord, tree **treeRoot) {
+    // Prompt the user to choose the level
+    int level;
+    do {
+        printf("Choose the level (1, 2, or 3): ");
+        scanf("%d", &level);
+    } while (level < 1 || level > 3);
 
-    // Select a random word from the dictionary
-    //char *word = chooseWord("dictionary.txt"); // Adjust the filename as needed
-        char *word ="test";
-    // Print initial game state (optional)
+    // Construct the binary tree based on the chosen level
+    *treeRoot = createTreeByLevel(NULL, level);
+
+    // Select a random word from the constructed tree
+    *randomWord = (char *)malloc(MAX_WORD_LENGTH * sizeof(char));
+    chooseRandomWord(*treeRoot, *randomWord);
+
+    // Initialize other Hangman game state variables
+    int lives = MAX_LIVES;
+    //memset(guessed_letters, '\0', sizeof(guessed_letters));
+
+    // Print initial game state
     printf("Hangman Game Initialized.\n");
-    printf("Word to guess: %s\n", word);
+    printf("Word to guess: %s\n", *randomWord);
     printf("Number of lives: %d\n", lives);
     printf("\n");
-
-    return word;
 }
-
 
 
 
@@ -228,13 +236,23 @@ void printWord(tree *root) {
     printWord(root->right);
 }
 
-void playHangMan(tree *root, int niveau) {
-    // Initialize the game.
-    int lives = 6;
-    char guessed_letters[26]; // Assuming only lowercase letters will be guessed
+
+
+void playHangman() {
+    // Initialize the Hangman game state
+    char *word;
+    tree *root;
+    initializeHangman(&word, &root);
+    int lives = MAX_LIVES;
+    char guessed_letters[26];
     memset(guessed_letters, '\0', sizeof(guessed_letters));
 
-    // Play the game.
+    // Convert the word to lowercase for consistency
+    for (int i = 0; word[i] != '\0'; i++) {
+        word[i] = tolower(word[i]);
+    }
+
+    // Main game loop
     while (lives > 0 && !is_word_guessed_tree(root, guessed_letters)) {
         // Display current Hangman state
         printf("Hangman State:\n");
@@ -250,33 +268,63 @@ void playHangMan(tree *root, int niveau) {
         }
         printf("\n\n");
 
-        // Get a letter from the user.
+        // Get user input for a letter guess
         char letter = takeUserInput();
 
-        // Check if the letter is in the word.
+        // Check if the guessed letter is in the word
         if (checkLetterInWord(root, letter)) {
-            // Update the Hangman state based on the correctness of the guessed letter.
-            updateHangmanState(&root, letter, guessed_letters, &lives);
+            // Update Hangman state based on the correctness of the guessed letter
+            updateHangmanState(root, letter, guessed_letters, &lives);
 
-            // Check if the word is guessed.
+            // Check if the word is fully guessed
             if (is_word_guessed_tree(root, guessed_letters)) {
                 printf("Congratulations! You guessed the word!\n");
-                return;
+                break;
             }
         } else {
-            // Decrement the number of lives.
+            // Decrement lives if the guessed letter is incorrect
             lives--;
-
             printf("Incorrect guess! You have %d lives remaining.\n", lives);
         }
     }
 
+    // Game over: player either won or lost
     if (lives == 0) {
-        printf("You lose! The word was: ");
-        printWord(root);
-        printf("\n");
+        printf("You lose! The word was: %s\n", word);
     }
+
+    // Free memory allocated for the tree
+    arbreSuppr(root);
+    free(word);
 }
+
+
+/**
+ * psuedo code of playing hangman game 
+ * Initialize Hangman game:
+  Load dictionary
+  Choose random word
+  Initialize lives
+  Initialize guessed letters array
+
+Display initial state
+
+While game is not over:
+  Prompt player for a letter guess
+  Validate input
+  Update Hangman state
+  Check game over condition
+  Display Hangman state
+  Display guessed letters
+
+Display game over message
+Prompt to play again or exit
+
+ * 
+ * 
+ * 
+ * 
+*/
 
 /*
 Initialize Hangman Game:

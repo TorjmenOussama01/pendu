@@ -343,6 +343,7 @@ void removeWordFromFile(const char *wordToRemove) {
 }
 
 
+
 void removeWordFromTreeAndFile(tree **root) {
     int choice;
     printf("Enter 1 to delete from binary tree, 2 to delete from file, 3 to delete from both: ");

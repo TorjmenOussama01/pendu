@@ -9,6 +9,6 @@ char takeUserInput();
 bool checkLetterInWord(tree *root, char letter);
 void updateHangmanState(tree **root, char letter, char guessed_letters[], int *lives);
 bool checkGameOverCondition(tree *root, char guessed_letters[], int lives);
-void playHangMan(tree *root, int niveau);
+void playHangman();
 void printWord(tree *root);
 bool is_word_guessed_tree(tree *root, char guessed_letters[]); 

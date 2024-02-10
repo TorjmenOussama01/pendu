@@ -61,11 +61,11 @@ void handleInput()
         case 5:
             printOccurrences(dico);
             break;
-/*
+
         case 6:
             dico = printRandomWord(dico);
             break;
-*/
+
         case 7:
             printEmptiedTree(dico);
             arbreSuppr(dico);
@@ -84,6 +84,9 @@ void handleInput()
             //break;  
         case 9:
             chooseRandomWord(dico);
+            break;      
+        case 10:
+            playHangman();
             break;      
 
         case 0:
