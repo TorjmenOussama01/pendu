@@ -3,14 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <tree.h>
-
-// tree + word 
-// decomposing that word into  keys nodes in the tree 
-
-// taking input from the user, letter , 
-//  if the letter, is in the word, then, showcase the letter in all the positions , and delete that letter , from the world 
-// else , draw the part of the hangman 
+#include "../../headers/tree.h"
 
 char test[] = "test";
 
@@ -23,8 +16,8 @@ char *initializeHangman() {
     memset(guessed_letters, '\0', sizeof(guessed_letters));
 
     // Select a random word from the dictionary
-    char *word = chooseWord("dictionary.txt"); // Adjust the filename as needed
-
+    //char *word = chooseWord("dictionary.txt"); // Adjust the filename as needed
+        char *word ="test";
     // Print initial game state (optional)
     printf("Hangman Game Initialized.\n");
     printf("Word to guess: %s\n", word);
