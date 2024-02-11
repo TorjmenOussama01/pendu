@@ -283,141 +283,64 @@ void printWord(tree *root) {
 
 
 void playHangman() {
-    // Initialize the Hangman game state
-    tree *root;
-    char *word = initializeHangman(&root);
-    if (word == NULL) {
-        printf("Error: Failed to initialize Hangman game.\n");
-        return;
-    }
-
-    int lives = MAX_LIVES;
-    char guessed_letters[26];
-    memset(guessed_letters, '\0', sizeof(guessed_letters));
-
-    // Convert the word to lowercase for consistency
-    char *lowercaseWord = strdup(word);
-    for (int i = 0; lowercaseWord[i] != '\0'; i++) {
-        lowercaseWord[i] = tolower(lowercaseWord[i]);
-    }
-    printf("Randomly chosen word: %s\n", lowercaseWord);
-
-    // Main game loop
-  while (lives > 0) {
-    // Display current Hangman state
-    printf("Hangman State:\n");
-    draw_hangman(lives);
-    printf("\n");
-
-    // Display guessed letters
-    printf("Guessed Letters: ");
-    for (char c = 'a'; c <= 'z'; c++) {
-        if (guessed_letters[c - 'a'] != '\0') {
-            printf("%c ", c);
-        }
-    }
-    printf("\n\n");
-
-    // Get user input for a letter guess
-    char letter = takeUserInput();
-
-    // Update Hangman state based on the correctness of the guessed letter
-    updateHangmanState(root, letter, guessed_letters, &lives, lowercaseWord);
-
-    // Check if the game is over (word guessed completely)
-    if (checkGameOverCondition(root, guessed_letters, lives, lowercaseWord)) {
-        break;
-    }
-}
-
-
-    // Free memory allocated for the tree and word
-    arbreSuppr(root);
-    free(word);
-    free(lowercaseWord);
-}
-
-
-/**
- * psuedo code of playing hangman game 
- * Initialize Hangman game:
-  Load dictionary
-  Choose random word
-  Initialize lives
-  Initialize guessed letters array
-
-Display initial state
-
-While game is not over:
-  Prompt player for a letter guess
-  Validate input
-  Update Hangman state
-  Check game over condition
-  Display Hangman state
-  Display guessed letters
-
-Display game over message
-Prompt to play again or exit
-
- * 
- * char* initializeHangman(tree **treeRoot) {
-    // Prompt the user to choose the level
-    int level;
+    int playAgain;
     do {
-        printf("Choose the level (1, 2, or 3): ");
-        scanf("%d", &level);
-    } while (level < 1 || level > 3);
+        // Initialize the Hangman game state
+        tree *root;
+        char *word = initializeHangman(&root);
+        if (word == NULL) {
+            printf("Error: Failed to initialize Hangman game.\n");
+            return;
+        }
 
-    // Construct the binary tree based on the chosen level
-    *treeRoot = createTreeByLevel(NULL, level);
+        int lives = MAX_LIVES;
+        char guessed_letters[26];
+        memset(guessed_letters, '\0', sizeof(guessed_letters));
 
-    // Select a random word from the constructed tree
-    char *randomWord = chooseRandomWord(*treeRoot);
-    if (randomWord == NULL) {
-        printf("Error: Failed to choose a random word.\n");
-        return NULL;
-    }
+        // Convert the word to lowercase for consistency
+        char *lowercaseWord = strdup(word);
+        for (int i = 0; lowercaseWord[i] != '\0'; i++) {
+            lowercaseWord[i] = tolower(lowercaseWord[i]);
+        }
+        printf("Randomly chosen word: %s\n", lowercaseWord);
 
-    // Print initial game state
-    printf("Hangman Game Initialized.\n");
-    printf("Word to guess: %s\n", randomWord);
-    printf("Number of lives: %d\n", MAX_LIVES);
-    printf("\n");
+        // Main game loop
+        while (lives > 0) {
+            // Display current Hangman state
+            printf("Hangman State:\n");
+            draw_hangman(lives);
+            printf("\n");
 
-    return randomWord;
+            // Display guessed letters
+            printf("Guessed Letters: ");
+            for (char c = 'a'; c <= 'z'; c++) {
+                if (guessed_letters[c - 'a'] != '\0') {
+                    printf("%c ", c);
+                }
+            }
+            printf("\n\n");
+
+            // Get user input for a letter guess
+            char letter = takeUserInput();
+
+            // Update Hangman state based on the correctness of the guessed letter
+            updateHangmanState(root, letter, guessed_letters, &lives, lowercaseWord);
+
+            // Check if the game is over (word guessed completely)
+            if (checkGameOverCondition(root, guessed_letters, lives, lowercaseWord)) {
+                break;
+            }
+        }
+
+        // Free memory allocated for the tree and word
+        arbreSuppr(root);
+        free(word);
+        free(lowercaseWord);
+
+        // Ask if the player wants to play again
+        printf("Do you want to play again? (1 for yes, 0 for no): ");
+        scanf("%d", &playAgain);
+        while (getchar() != '\n'); // Clear input buffer
+
+    } while (playAgain == 1);
 }
- * 
- * 
-*/
-
-/*
-Initialize Hangman Game:
-
-initializeHangman: Function to initialize the Hangman game, including setting up the initial state of the Hangman (e.g., number of lives, empty guessed letters array) and selecting a random word from the dictionary.
-Display Hangman State:
-
-displayHangmanState: Function to display the current state of the Hangman, including the Hangman figure representing the number of lives remaining.
-Take User Input:
-
-takeUserInput: Function to prompt the user to input a letter guess and validate the input (e.g., check if it's a valid lowercase letter).
-Check Letter in Word:
-
-checkLetterInWord: Function to check if the guessed letter is present in the selected word.
-Update Hangman State:
-
-updateHangmanState: Function to update the Hangman state based on the correctness of the guessed letter.
-If the letter is correct, update the guessed letters array and remove the letter from the binary tree representing the word.
-If the letter is incorrect, decrement the number of lives remaining.
-Check Game Over Condition:
-
-isGameOver: Function to check if the game is over (either the word is guessed completely or the player runs out of lives).
-Main Game Loop:
-
-mainGameLoop: Main loop to repeatedly take user input, check the letter in the word, update the Hangman state, and check the game over condition until the game ends.
-Display Game Outcome:
-
-displayGameOutcome: Function to display the outcome of the game (e.g., if the player wins by guessing the word or loses by running out of lives).
-Cleanup Resources:
-
-cleanupResources: Function to clean up any resources used during the game (e.g., free memory allocated for the binary tree).
-*/
