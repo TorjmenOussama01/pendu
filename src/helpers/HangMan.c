@@ -224,6 +224,7 @@ void updateHangmanState(tree *root, char letter, char guessed_letters[], int *li
     }
 }
 
+
 void displayOccurrences(tree *root, char letter) {
     if (root == NULL) {
         return;
@@ -240,24 +241,33 @@ void displayOccurrences(tree *root, char letter) {
 
 
 
-bool checkGameOverCondition(tree *root, char guessed_letters[], int lives) {
-    // Check if all the letters in the word have been guessed
-    if (is_word_guessed_tree(root, guessed_letters)) {
+bool checkGameOverCondition(tree *root, char guessed_letters[], int lives, const char *word) {
+    int guessedWordLength = strlen(word);
+
+    // Check if all the different guessed letters are in the word
+    for (int i = 0; word[i] != '\0'; i++) {
+        if (guessed_letters[word[i] - 'a'] != '\0') {
+            guessedWordLength--;
+        }
+    }
+
+    // If the length of the guessed word is zero, all letters are found
+    if (guessedWordLength == 0) {
         printf("Congratulations! You guessed the word!\n");
         return true;
     }
-    
+
     // Check if the player runs out of lives
     if (lives == 0) {
-        printf("Game over! You ran out of lives. The word was: ");
-        printWord(root);
-        printf("\n");
+        printf("Game over! You ran out of lives. The word was: %s\n", word);
         return true;
     }
-    
+
     // Game is not over yet
     return false;
 }
+
+
 
 void printWord(tree *root) {
     if (root == NULL) {
@@ -293,36 +303,35 @@ void playHangman() {
     printf("Randomly chosen word: %s\n", lowercaseWord);
 
     // Main game loop
-    while (lives > 0 && !is_word_guessed_tree(root, guessed_letters)) {
-        // Display current Hangman state
-        printf("Hangman State:\n");
-        draw_hangman(lives);
-        printf("\n");
+  while (lives > 0) {
+    // Display current Hangman state
+    printf("Hangman State:\n");
+    draw_hangman(lives);
+    printf("\n");
 
-        // Display guessed letters
-        printf("Guessed Letters: ");
-        for (char c = 'a'; c <= 'z'; c++) {
-            if (guessed_letters[c - 'a'] != '\0') {
-                printf("%c ", c);
-            }
+    // Display guessed letters
+    printf("Guessed Letters: ");
+    for (char c = 'a'; c <= 'z'; c++) {
+        if (guessed_letters[c - 'a'] != '\0') {
+            printf("%c ", c);
         }
-        printf("\n\n");
-
-        // Get user input for a letter guess
-        char letter = takeUserInput();
-
-        // Update Hangman state based on the correctness of the guessed letter
-        updateHangmanState(root, letter, guessed_letters, &lives, lowercaseWord);
     }
+    printf("\n\n");
 
-    // Game over: player either won or lost
-    if (lives == 0) {
-        printf("You lose! The word was: %s\n", lowercaseWord);
-    } else {
-        printf("Congratulations! You guessed the word!\n");
+    // Get user input for a letter guess
+    char letter = takeUserInput();
+
+    // Update Hangman state based on the correctness of the guessed letter
+    updateHangmanState(root, letter, guessed_letters, &lives, lowercaseWord);
+
+    // Check if the game is over (word guessed completely)
+    if (checkGameOverCondition(root, guessed_letters, lives, lowercaseWord)) {
+        break;
     }
+}
 
-    // Free memory allocated for the tree
+
+    // Free memory allocated for the tree and word
     arbreSuppr(root);
     free(word);
     free(lowercaseWord);
