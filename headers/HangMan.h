@@ -7,7 +7,7 @@ void draw_hangman(int lives);
 char *initializeHangman();
 char takeUserInput();
 bool checkLetterInWord(tree *root, char letter);
-void updateHangmanState(tree **root, char letter, char guessed_letters[], int *lives);
+void updateHangmanState(tree *root, char letter, char guessed_letters[], int *lives, const char *word);
 bool checkGameOverCondition(tree *root, char guessed_letters[], int lives);
 void playHangman();
 void printWord(tree *root);

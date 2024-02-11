@@ -193,7 +193,7 @@ void traverseInOrder(tree *root, char guessed_letters[], bool *letterGuessedCorr
 }
 
 
-void updateHangmanState(tree *root, char letter, char guessed_letters[], int *lives) {
+void updateHangmanState(tree *root, char letter, char guessed_letters[], int *lives, const char *word) {
     // Mark the guessed letter as already guessed
     guessed_letters[letter - 'a'] = letter;
 
@@ -201,6 +201,17 @@ void updateHangmanState(tree *root, char letter, char guessed_letters[], int *li
     printf("Occurrences of '%c' in the word: ", letter);
     bool letterGuessedCorrectly = false;
     traverseInOrder(root, guessed_letters, &letterGuessedCorrectly, letter);
+    printf("\n");
+
+    // Display the word with guessed letters and asterisks for unguessed letters
+    printf("Word: ");
+    for (int i = 0; word[i] != '\0'; i++) {
+        if (guessed_letters[word[i] - 'a'] != '\0') {
+            printf("%c", word[i]); // Guessed letter
+        } else {
+            printf("*"); // Unguessed letter
+        }
+    }
     printf("\n");
 
     // Check if the guessed letter is in the word
@@ -301,7 +312,7 @@ void playHangman() {
         char letter = takeUserInput();
 
         // Update Hangman state based on the correctness of the guessed letter
-        updateHangmanState(root, letter, guessed_letters, &lives);
+        updateHangmanState(root, letter, guessed_letters, &lives, lowercaseWord);
     }
 
     // Game over: player either won or lost
