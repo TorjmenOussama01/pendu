@@ -12,3 +12,4 @@ bool checkGameOverCondition(tree *root, char guessed_letters[], int lives);
 void playHangman();
 void printWord(tree *root);
 bool is_word_guessed_tree(tree *root, char guessed_letters[]); 
+//void traverseInOrderWithinWord(tree *root, const char *word, char guessed_letters[], bool *letterGuessedCorrectly, char letter);
