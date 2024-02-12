@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "../../headers/struct.h"
 #include "../../headers/display.h"
 
@@ -13,7 +14,6 @@ tree *append(char letter)
     node->letter = letter;
     node->left = NULL;
     node->right = NULL;
-    node->occurrences = 0;
 
     return node;
 }
@@ -26,7 +26,6 @@ tree *markEndOfWord()
     node->letter = '\0';
     node->left = NULL;
     node->right = NULL;
-    node->occurrences = 1;
 
     return node;
 }
@@ -75,8 +74,7 @@ void dicoAfficher(tree *node, char word[], int wordLen)
     dicoAfficher(node->right, word, wordLen);
 }
 
-// * On insère un mot dans un arbre donné, si le mot existe on incremente le nombre d'occurence
-// * du mot
+// * On insère un mot dans un arbre donné
 tree *dicoInsererMot(char word[50], tree *root, int wordIndex)
 {
     tree *temp;
@@ -100,7 +98,7 @@ tree *dicoInsererMot(char word[50], tree *root, int wordIndex)
                 wordIndex++;
             }
 
-            // * On marque la fin du mot par un noeud qui contient le nombre d'occurence 1
+            // * On marque la fin du mot 
             temp->left = markEndOfWord();
 
             return root;
@@ -115,14 +113,8 @@ tree *dicoInsererMot(char word[50], tree *root, int wordIndex)
             // * Si la lettre existe déja on test le reste de mot
             // * pour savoir si on va incrementer le nombre
             // * d'occurence.
-            if (root->left == NULL && root->letter == '\0')
-            {
-                root->occurrences++;
-            }
-            else
-            {
+            if (root->left != NULL && root->letter != '\0')
                 root->left = dicoInsererMot(word, root->left, wordIndex + 1);
-            }
 
             return root;
         }
@@ -134,64 +126,29 @@ tree *dicoInsererMot(char word[50], tree *root, int wordIndex)
     }
 }
 
-// * Afficher le nombre d'occurence d'un mot donné
-int dicoNbOcc(char *word, int wordIndex, tree *root)
+// * Rechercher un mot donné
+bool searchWord(char *word, int wordIndex, tree *root)
 {
+
+    if (root == NULL)
+        return false;
     // * Si la premiere lettre du mot donné est égale a celle de la racine
     // * on passe au sous arbre gauche
     if (word[wordIndex] == root->letter)
     {
-        // * Si le caractere est \0, le mot est vérifier et on
-        // * retourne le nombre d'occurence.
+        // * Si le caractere est \0, le mot est vérifier
         if (root->left == NULL && root->letter == '\0')
-            return root->occurrences;
+            return true;
 
         // * Sinon on passe au noeud suivant pour vérfier le reste du mot
-        return dicoNbOcc(word, wordIndex + 1, root->left);
+        return searchWord(word, wordIndex + 1, root->left);
     }
-
-    if (root->right == NULL)
-        return 0;
 
     // * Si la premiere lettre du mot donné est differente de celle
     // * de la racine on vérifie les sous arbres droites.
-    return dicoNbOcc(word, wordIndex, root->right);
+    return searchWord(word, wordIndex, root->right);
 }
 
-// * Afficher le nombre des mots différents
-int dicoNbMotsDifferents(tree *root)
-{
-    if (root != NULL)
-    {
-        // * Si le noeud marque la fin d'un mot, on retourne
-        // * 1  et on passe aux sous arbre gauche et droite
-        if (root->letter == '\0')
-            return 1 + (dicoNbMotsDifferents(root->left) + dicoNbMotsDifferents(root->right));
-
-        // * Sinon on passe aux sous arbres gauche et droite
-        return dicoNbMotsDifferents(root->left) + dicoNbMotsDifferents(root->right);
-    }
-
-    return 0;
-}
-
-// * Afficher le nombre total des mots
-int dicoNbMotsTotal(tree *root)
-{
-    if (root != NULL)
-    {
-        // * Si le noeud marque la fin d'un mot, on retourne
-        // * le nombre d'occurence de ce mot, et on passe
-        // * aux sous arbre gauche et droite
-        if (root->letter == '\0')
-            return root->occurrences + (dicoNbMotsTotal(root->left) + dicoNbMotsTotal(root->right));
-
-        // * Sinon on passe aux sous arbres gauche et droite
-        return dicoNbMotsTotal(root->left) + dicoNbMotsTotal(root->right);
-    }
-
-    return 0;
-}
 int nombreAleatoire(int nombreMax)
 {
     srand(time(NULL));
@@ -455,97 +412,4 @@ tree *createTreeByLevel(tree *dico,int level)
     
     return dico;
 }
-
-
-
-
-///* commented functionality above 
-
-// Function to choose a random word from the tree
-/*void chooseRandomWord(tree *node)
-    /*{
-    char word[100];
-    int wordLen=0;
-    if (node == NULL)
-        return;
-    // * Sinon, on ajoute la lettre dans un tableau et on incémente son indice
-    while (node->letter != '\0')
-    {
-        int random= rand() % 2;
-        if (node->letter != '\0' && random == 0)
-        {
-        word[wordLen] = node->letter;
-        wordLen++;
-        node=node->left;
-        }
-        else if (node->letter != '\0' && random != 0)
-        {
-        wordLen--;
-        node=node->right;
-        }
-    }
-
-    printArray(word, wordLen);
-    return word;
-}*/
-
-
-// old commentede functionalit of create tree by level 
-//* tree *createTreeByLevel(tree *dico,int level)
-  /*  {
-    char filename[100];
-
-    do
-    {
-        printCharactere(' ', 4);
-        printf("Entrer nom fichier => ");
-        scanf("%s", filename);
-    } while (strlen(filename) < 0 || strlen(filename) > 100);
-
-    FILE *file = fopen(filename, "r");
-
-    system("clear");
-    printHeader("Insertion Options", 25);
-    printCharactere(' ', 18);
-
-    if (!file)
-    {
-        printf("\033[1;31mVeuillez vérifier le nom de fichier\033[0m");
-        printFooter();
-
-        return dico;
-    }
-
-    char line[500];
-
-    while (fgets(line, sizeof(line), file))
-    {
-        int wordLen = strlen(line);
-        if ((level == 1 && wordLen >= 2 && wordLen <= 5) ||
-            (level == 2 && wordLen >= 6 && wordLen <= 8) ||
-            (level == 3 && (wordLen > 8))) {
-        line[strlen(line) - 1] = '\0';
-        dico = dicoInsererMot(line, dico, 0);                
-
-        }
-    }
-
-    fclose(file);
-
-    printf("\033[0;32mMots ajouté avec success\033[0m");
-    printFooter();
-            char path[100];
-            printDictionary(dico, path, 0);  
-    /*
-    // Print the random word
-    if (randomWord != NULL)
-        printf("Random Word: %s\n", randomWord);
-    else
-        printf("The tree is empty.\n");
-
-    // Free memory allocated for the random word
-    free(randomWord);  
-
-    return dico;
-}*/
 

@@ -18,13 +18,12 @@ int arbreEstVide(tree *root)
 }
 
 //  * Construire un arbre
-tree *arbreCons(char letter, int occurrences, tree *leftSubTree, tree *rightSubTree)
+tree *arbreCons(char letter, tree *leftSubTree, tree *rightSubTree)
 {
     tree *root;
     root = (tree *)malloc(sizeof(tree));
 
     root->letter = letter;
-    root->occurrences = occurrences;
     root->left = leftSubTree;
     root->right = rightSubTree;
 
@@ -35,12 +34,6 @@ tree *arbreCons(char letter, int occurrences, tree *leftSubTree, tree *rightSubT
 char arbreRacineLetter(tree *node)
 {
     return node->letter;
-}
-
-// * Retouner le nombre d'occurence d'un noeud donné
-int arbreRacineNbOcc(tree *node)
-{
-    return node->occurrences;
 }
 
 // * Retourner le sous arbre gauche d'un arbre donné

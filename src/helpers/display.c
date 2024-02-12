@@ -33,16 +33,10 @@ void printOptions()
 {
     printSingleOption("1. Ajouter des mots au dictionaires", 4, 29, 0);
     printSingleOption("2. Consulter le dictionaire", 4, 37, 0);
-    printSingleOption("3. Afficher le nombre totales des mots", 4, 26, 0);
-    printSingleOption("4. Afficher le nombre des mots differents", 4, 23, 0);
-    printSingleOption("5. Consulter le nombre d'occurence d'un mot", 4, 21, 0);
-    printSingleOption("6. Piocher un mot", 4, 47, 0);
-    printSingleOption("7. Vider l'arbre", 4, 48, 0);
-    printSingleOption("8. deleted from the dictionary and file ", 4, 49, 0);
-    printSingleOption("9. chooseRandomWord(dico); choose random word ! ", 4, 49, 0);
-    printSingleOption("10.playHangman(); Play hangman functionality ", 4, 49, 0);
-    printSingleOption("11. deleted from the dictionary and file ", 4, 49, 0);
-
+    printSingleOption("3. Chercher un mot", 4, 46, 0);
+    printSingleOption("4. Supprimer un mot", 4, 45, 0);
+    printSingleOption("5. Jeu de pendu", 4, 49, 0);
+    printSingleOption("6. Vider l'arbre", 4, 48, 0);
     printSingleOption(" ", 4, 63, 0);
     printSingleOption("0. Quitter", 4, 54, 1);
 }
@@ -98,52 +92,14 @@ void printDictionary(tree *dico, char path[], int wordLen)
    // system("clear");
 }
 
-void printDifferentWords(tree *dico)
-{
-    system("clear");
-    printHeader("Dictionary Stats", 27);
-    printCharactere(' ', 20);
-    printf("Le nombre de mot different est:  \033[0;35m%d\033[0m", dicoNbMotsDifferents(dico));
-    printFooter();
-}
-
-void printTotalWords(tree *dico)
+/*void printTotalWords(tree *dico)
 {
     system("clear");
     printHeader("Dictionary Stats", 27);
     printCharactere(' ', 22);
     printf("Le nombre total de mot est:  \033[0;35m%d\033[0m", dicoNbMotsTotal(dico));
     printFooter();
-}
-
-void printOccurrences(tree *dico)
-{
-    char word[100];
-
-    if (dico == NULL)
-    {
-        system("clear");
-        printHeader("Dictionary Stats", 27);
-        printCharactere(' ', 25);
-        printf("\033[1;31mL'arbre est déja vide\033[0m");
-        printFooter();
-    }
-    else
-    {
-        do
-        {
-            printCharactere(' ', 4);
-            printf("Entrer mot => ");
-            scanf("%s", word);
-        } while (strlen(word) < 0 || strlen(word) > 100);
-
-        system("clear");
-        printHeader("Dictionary Stats", 27);
-        printCharactere(' ', 18);
-        printf("Le nombre d'occurence de \033[0;35m%s\033[0m est: \033[0;35m%d\033[0m", word, dicoNbOcc(word, 0, dico));
-        printFooter();
-    }
-}
+}*/
 
 tree *printRandomWord(tree *dico)
 {

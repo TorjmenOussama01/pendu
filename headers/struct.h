@@ -3,7 +3,6 @@
 
 typedef struct treeType
 {
-    int occurrences;
     char letter;
     struct treeType *left;
     struct treeType *right;

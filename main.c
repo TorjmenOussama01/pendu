@@ -44,52 +44,36 @@ void handleInput()
         case 1:
             dico = fillTree(dico);
             break;
-
         case 2:
             char path[100];
             printDictionary(dico, path, 0);
             break;
-
         case 3:
-            printTotalWords(dico);
-            break;
+            char word[100];
 
-        case 4:
-            printDifferentWords(dico);
-            break;
-
+            do
+            {
+                printCharactere(' ', 4);
+                printf("Entrer mot => ");
+                scanf("%s", word);
+            } while (strlen(word) < 0 || strlen(word) > 100);            
+            if (searchWord(word,0,dico))
+                printf("Mot trouvé");
+            else
+                printf("Mot n'éxiste pas");   
+            break;         
+        case 4:       
+            char wordToDelete[50]; // Assuming MAX_WORD_LENGTH is defined somewhere
+            removeWordFromTreeAndFile(&dico);
+            break;    
         case 5:
-            printOccurrences(dico);
-            break;
-
+            playHangman();
+            break; 
         case 6:
-            dico = printRandomWord(dico);
-            break;
-
-        case 7:
             printEmptiedTree(dico);
             arbreSuppr(dico);
             dico = arbreConsVide();
             break;
-        case 8:
-        
-            char wordToDelete[15]; // Assuming MAX_WORD_LENGTH is defined somewhere
-            removeWordFromTreeAndFile(&dico);
-
-            break;
-
-
-
-            //dico = createTreeByLevel(dico,1);
-            //break;  
-        case 9:
-            chooseRandomWord(dico);
-            break;      
-        case 10:
-
-            playHangman();
-            break;      
-
         case 0:
             exit(0);
 
