@@ -247,7 +247,7 @@ void updateHangmanState(tree *root, char letter, char guessed_letters[], int *li
     for (int i = 0; word[i] != '\0'; i++) {
         if (word[i] == letter) {
             letterGuessedCorrectly = true;
-            guessed_letters[i] = letter;
+            //guessed_letters[i] = letter;
         }
     }
     printf("\n");
@@ -255,12 +255,12 @@ void updateHangmanState(tree *root, char letter, char guessed_letters[], int *li
     // Display the word with guessed letters and asterisks for unguessed letters
     printf("Word: ");
     for (int i = 0; word[i] != '\0'; i++) {
-        if (guessed_letters[i] != '\0') {
-            printf("%c", guessed_letters[i]); // Guessed letter
-        } else if (word[i] != ' ') {
-            printf("*"); // Unguessed letter
-        } else {
+        if (word[i] == ' ') {
             printf(" "); // Space
+        } else if (guessed_letters[word[i] - 'a'] != '\0') {
+            printf("%c", guessed_letters[word[i] - 'a']); // Guessed letter
+        } else {
+            printf("*"); // Unguessed letter
         }
     }
     printf("\n");
@@ -377,7 +377,7 @@ void playHangman() {
 
             // Update Hangman state based on the correctness of the guessed letter
             updateHangmanState(root, letter, guessed_letters, &lives, lowercaseWord);
-draw_hangman(lives);
+            draw_hangman(lives);
             // Check if the game is over (word guessed completely)
             if (checkGameOverCondition(root, guessed_letters, lives, lowercaseWord)) {
                 break;
