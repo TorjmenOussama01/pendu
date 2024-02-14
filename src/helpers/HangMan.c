@@ -8,7 +8,6 @@
 
 const MAX_WORD_LENGTH = 10 ; 
 const MAX_LIVES = 6 ;
-char test[] = "test";
 
 // initialization of the game : 
 // Function to initialize the Hangman game
@@ -86,23 +85,6 @@ bool is_word_guessed(char *word, char guessed_letters[]) {
     return true;
 }
 
-
-bool is_word_guessed_tree(tree *root, char guessed_letters[]) {
-    // Base case: If the root is NULL, the tree is empty
-    if (root == NULL) {
-        return true; // An empty tree is considered guessed
-    }
-
-    // If the current node's letter is not guessed, return false
-    if (root->letter != ' ' && guessed_letters[root->letter - 'a'] == '\0') {
-        return false;
-    }
-
-    // Recursively check in the left and right subtrees
-    return is_word_guessed_tree(root->left, guessed_letters) &&
-           is_word_guessed_tree(root->right, guessed_letters);
-}
-
 bool is_letter_in_word(char *word, char letter) {
     // Check if the letter is in the word.
     for (int i = 0; word[i] != '\0'; i++) {
@@ -174,22 +156,6 @@ void draw_hangman(int lives) {
             break;
     }
 }
-/*
-void traverseInOrderWithinWord(tree *root, const char *word, char guessed_letters[], bool *letterGuessedCorrectly, char letter) {
-    if (root != NULL) {
-        traverseInOrderWithinWord(root->left, word, guessed_letters, letterGuessedCorrectly, letter);
-
-        // Check if the current node's letter matches the guessed letter and it's in the chosen word
-        if (root->letter == letter && strchr(word, letter) != NULL) {
-            // Update the guessed letters array to reveal the occurrence of the guessed letter
-            guessed_letters[letter - 'a'] = letter;
-            *letterGuessedCorrectly = true;
-        }
-
-        traverseInOrderWithinWord(root->right, word, guessed_letters, letterGuessedCorrectly, letter);
-    }
-}
-*/
 // Helper function to traverse the binary tree and update guessed letters
 void traverseInOrder(tree *root, char guessed_letters[], bool *letterGuessedCorrectly, char letter) {
     if (root != NULL) {
@@ -205,38 +171,6 @@ void traverseInOrder(tree *root, char guessed_letters[], bool *letterGuessedCorr
         traverseInOrder(root->right, guessed_letters, letterGuessedCorrectly, letter);
     }
 }
-/*
-void updateHangmanState(tree *root, const char *word, char letter, char guessed_letters[], int *lives) {
-    // Mark the guessed letter as already guessed
-    guessed_letters[letter - 'a'] = letter;
-
-    // Display all occurrences of the guessed letter in the word
-    printf("Occurrences of '%c' in the word: ", letter);
-    bool letterGuessedCorrectly = false;
-    traverseInOrderWithinWord(root, word, guessed_letters, &letterGuessedCorrectly, letter);
-    printf("\n");
-
-    // Display the word with guessed letters and asterisks for unguessed letters
-    printf("Word: ");
-    for (int i = 0; word[i] != '\0'; i++) {
-        if (guessed_letters[word[i] - 'a'] != '\0') {
-            printf("%c", word[i]); // Guessed letter
-        } else {
-            printf("*"); // Unguessed letter
-        }
-    }
-    printf("\n");
-
-    // Check if the guessed letter is in the word
-    if (!letterGuessedCorrectly) {
-        // Decrement lives if the guessed letter is incorrect
-        (*lives)--;
-        printf("Incorrect guess! You have %d lives remaining.\n", *lives);
-    } else {
-        printf("Correct guess!\n");
-    }
-}
-*/
 void updateHangmanState(tree *root, char letter, char guessed_letters[], int *lives, const char *word) {
     // Mark the guessed letter as already guessed
     guessed_letters[letter - 'a'] = letter;
@@ -388,6 +322,117 @@ void playHangman() {
         arbreSuppr(root);
         free(word);
         free(lowercaseWord);
+
+        // Ask if the player wants to play again
+        printf("Do you want to play again? (1 for yes, 0 for no): ");
+        scanf("%d", &playAgain);
+        while (getchar() != '\n'); // Clear input buffer
+
+    } while (playAgain == 1);
+}
+void playHangman2players() {
+
+        int playAgain;
+    do {
+        Player players[2];  // Array to store the two players
+        int currentPlayer = 0;  // Variable to keep track of the current player
+
+        // Initialize players' scores and names
+        for (int i = 0; i < 2; i++) {
+            printf("Enter the name of Player %d: ", i + 1);
+            scanf("%s", players[i].name);
+            players[i].score = 0;
+        }
+        // Initialize the Hangman game state
+        tree *root;
+        // Prompt the user to choose the level
+        int level;
+        do {
+            printf("Choose the level (1, 2, or 3): ");
+            scanf("%d", &level);
+        } while (level < 1 || level > 3);
+
+        // Construct the binary tree based on the chosen level
+        root = createTreeByLevel(NULL, level);
+
+        
+        char guessed_letters[26];
+        memset(guessed_letters, '\0', sizeof(guessed_letters));
+        while ((players[currentPlayer].score < 5 )&& root!=NULL){
+        int lives = MAX_LIVES;
+        // Select a random word from the constructed tree
+        char *word = chooseRandomWord(root);
+        if (word == NULL) {
+            printf("Error: Failed to choose a random word.\n");
+            return NULL;
+        }
+        if (word == NULL) {
+            printf("Error: Failed to initialize Hangman game.\n");
+            return;
+        }
+        printf("player %s  turn \n",players[currentPlayer].name);
+        // Convert the word to lowercase for consistency
+        char *lowercaseWord = strdup(word);
+        for (int i = 0; lowercaseWord[i] != '\0'; i++) {
+            lowercaseWord[i] = tolower(lowercaseWord[i]);
+        }
+        printf("Word to guess: %s\n", lowercaseWord);
+        printf("Number of lives: %d\n", lives);
+
+        // Main game loop
+        while (lives > 0) {
+            // Display current Hangman state
+            printf("\nHangman State:\n");
+            
+            printf("\n");
+
+            // Display guessed letters
+            printf("Guessed Letters: ");
+            for (char c = 'a'; c <= 'z'; c++) {
+                if (guessed_letters[c - 'a'] != '\0') {
+                    printf("%c ", c);
+                } else {
+                    printf("_ ");
+                }
+            }
+            printf("\n");
+
+            // Get user input for a letter guess
+            char letter = takeUserInput();
+
+            // Update Hangman state based on the correctness of the guessed letter
+            updateHangmanState(root, letter, guessed_letters, &lives, lowercaseWord);
+            draw_hangman(lives);
+            // Check if the game is over (word guessed completely)
+            if (checkGameOverCondition(root, guessed_letters, lives, lowercaseWord)) {
+                // Update player's score if the word is guessed completely
+                if (is_word_guessed(word, guessed_letters)) {
+                    players[currentPlayer].score++;
+                    // Call the deleteWord function to delete the word from the tree
+                    root = deleteWord(root, lowercaseWord, 0);
+                }
+                printf("player %s  score : %d \n",players[currentPlayer].name,players[currentPlayer].score);
+                // Switch to the other player
+                currentPlayer = (currentPlayer + 1) % 2;
+                printf("player %s  score : %d \n",players[currentPlayer].name,players[currentPlayer].score);
+                break;
+            }
+        }
+        free(word);
+        free(lowercaseWord);
+        memset(guessed_letters, '\0', sizeof(guessed_letters));
+        }
+            // Announce the winner based on the scores
+            if (players[0].score > players[1].score) {
+                printf("%s wins!\n", players[0].name);
+            } else if (players[1].score > players[0].score) {
+                printf("%s wins!\n", players[1].name);
+            } else {
+                printf("It's a tie!\n");
+            }
+
+        // Free memory allocated for the tree and word
+        arbreSuppr(root);
 
         // Ask if the player wants to play again
         printf("Do you want to play again? (1 for yes, 0 for no): ");

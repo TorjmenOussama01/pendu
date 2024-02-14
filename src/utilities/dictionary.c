@@ -412,4 +412,3 @@ tree *createTreeByLevel(tree *dico,int level)
     
     return dico;
 }
-

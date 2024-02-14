@@ -21,7 +21,6 @@ mouton
 poule
 Paris
 Londres
-New
 York
 Tokyo
 Sydney

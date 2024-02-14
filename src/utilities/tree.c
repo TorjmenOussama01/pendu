@@ -8,15 +8,6 @@ tree *arbreConsVide()
     return NULL;
 }
 
-// * Vérifier si l'arbre est vide ou non
-int arbreEstVide(tree *root)
-{
-    if (root == NULL)
-        return 1;
-
-    return 0;
-}
-
 //  * Construire un arbre
 tree *arbreCons(char letter, tree *leftSubTree, tree *rightSubTree)
 {
@@ -28,24 +19,6 @@ tree *arbreCons(char letter, tree *leftSubTree, tree *rightSubTree)
     root->right = rightSubTree;
 
     return root;
-}
-
-// * Retouner la lettre d'un noeud donné
-char arbreRacineLetter(tree *node)
-{
-    return node->letter;
-}
-
-// * Retourner le sous arbre gauche d'un arbre donné
-tree *arbreFilsGauche(tree *root)
-{
-    return root->left;
-}
-
-// * Retourner le sous arbre droite d'un arbre donné
-tree *arbreFilsDroit(tree *root)
-{
-    return root->right;
 }
 
 // * Vider l'arbre donné

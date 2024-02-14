@@ -36,7 +36,8 @@ void printOptions()
     printSingleOption("3. Chercher un mot", 4, 46, 0);
     printSingleOption("4. Supprimer un mot", 4, 45, 0);
     printSingleOption("5. Jeu de pendu", 4, 49, 0);
-    printSingleOption("6. Vider l'arbre", 4, 48, 0);
+    printSingleOption("6. Jeu de pendu (2 joueurs)", 4, 37, 0);
+    printSingleOption("7. Vider l'arbre", 4, 48, 0);
     printSingleOption(" ", 4, 63, 0);
     printSingleOption("0. Quitter", 4, 54, 1);
 }
@@ -66,7 +67,7 @@ void printToConsole()
 
 void printDictionary(tree *dico, char path[], int wordLen)
 {
-    //system("clear");
+    system("clear");
     printHeader("Current Dictionary", 25);
     if (dico == NULL)
     {
@@ -89,46 +90,7 @@ void printDictionary(tree *dico, char path[], int wordLen)
         scanf("%d", &option);
     } while (option != 0);
 
-   // system("clear");
-}
-
-/*void printTotalWords(tree *dico)
-{
     system("clear");
-    printHeader("Dictionary Stats", 27);
-    printCharactere(' ', 22);
-    printf("Le nombre total de mot est:  \033[0;35m%d\033[0m", dicoNbMotsTotal(dico));
-    printFooter();
-}*/
-
-tree *printRandomWord(tree *dico)
-{
-    char filename[100];
-    char buffer[100];
-
-    do
-    {
-        printCharactere(' ', 4);
-        printf("Entrer le fichier => ");
-        scanf("%s", filename);
-    } while (strlen(filename) < 0 || strlen(filename) > 100);
-
-    system("clear");
-    printHeader("Random Word Picker", 25);
-    printCharactere(' ', 18);
- /*   if (choisirMot(buffer, filename) == 1)
-    {
-        printf("\033[0;32mMot ajouté avec success, le mot est \033[0;35m%s\033[0m", buffer);
-        printFooter();
-
-        return dicoInsererMot(buffer, dico, 0);
-    }
-
-
-    printf("\033[1;31mVeuillez vérifier le nom de fichier\033[0m");
-    printFooter();*/
-    printf("\033[0;32mMot choisi: \033[0;35m%s\033[0m", choisirMot(filename,1));
-    return dico;
 }
 
 void printEmptiedTree(tree *dico)
@@ -251,21 +213,4 @@ tree *fillTree(tree *dico)
     }
 
     return dico;
-}
-
-void printHelp()
-{
-    printf("\033[0;32mUSAGE:\n\033[0m");
-    printf("dictionary [--help]\n\n");
-
-    printf("\033[0;32m--help:\n\033[0m");
-    printf("\tImprime les informations d'aide.\n\n");
-
-    printf("\033[0;32mGUIDE\n\033[0m");
-    printf("\t1. L'insertion de mots peut se faire via deux options:\n");
-    printf("\t\t1.1. Manuellement où l'utilisateur tapez le mot.\n");
-    printf("\t\t1.2. Via des fichiers où le fichier doit être un fichier texte.\n\n");
-    printf("\t2. L'option 'Piocher' sera un mot aléatoire provenant d'un fichier texte donné.\n\n");
-    printf("\t3. Quelque soit l'option 'Insertion' ou 'Piocher' le fichier text doivent être dans \n");
-    printf("\tle même répertoire que l'executable.\n\n");
 }

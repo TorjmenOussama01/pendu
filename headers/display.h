@@ -5,7 +5,5 @@ void printSingleOption(const char *content, int firstSpacing, int secondSpacing,
 void printOptions();
 void printToConsole();
 void printDictionary(tree *dico, char path[], int wordLen);
-tree *printRandomWord(tree *dico);
 void printEmptiedTree(tree *dico);
 tree *fillTree(tree *dico);
-void printHelp();

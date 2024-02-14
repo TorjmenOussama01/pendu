@@ -70,6 +70,9 @@ void handleInput()
             playHangman();
             break; 
         case 6:
+            playHangman2players();
+            break;
+        case 7:
             printEmptiedTree(dico);
             arbreSuppr(dico);
             dico = arbreConsVide();
@@ -90,14 +93,6 @@ int main(int argc, char *argv[])
 {
     srand(time(NULL));
     dico = arbreConsVide();
-
-    // * Supposons que l'utilisateur a demandé de l'aide
-    if (argc > 1 && strcmp(argv[1], "--help") == 0)
-    {
-        printHelp();
-        return 0;
-    }
-
     handleInput();
 
     return 0;
