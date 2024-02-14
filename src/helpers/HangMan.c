@@ -8,6 +8,7 @@
 
 const MAX_WORD_LENGTH = 10 ; 
 const MAX_LIVES = 6 ;
+const MAX_GUESSED_WORDS = 6 ;
 
 // initialization of the game : 
 // Function to initialize the Hangman game
@@ -358,7 +359,7 @@ void playHangman2players() {
         
         char guessed_letters[26];
         memset(guessed_letters, '\0', sizeof(guessed_letters));
-        while ((players[currentPlayer].score < 5 )&& root!=NULL){
+        while ((players[currentPlayer].score < MAX_GUESSED_WORDS )&& root!=NULL){
         int lives = MAX_LIVES;
         // Select a random word from the constructed tree
         char *word = chooseRandomWord(root);

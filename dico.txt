@@ -43,7 +43,7 @@ Amsterdam
 Toronto
 Buenos
 Aires
-Dubaï
+Dubai
 medecin
 enseignant
 policier
@@ -74,7 +74,7 @@ steak
 salade
 sandwich
 soupe
-crêpe
+crepe
 riz
 pates
 creme
